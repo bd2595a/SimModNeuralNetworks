@@ -20,7 +20,7 @@ public:
 	//neuralnet->getRawPrediction(inputs) does the same, but produces a floating point guess
 	float getRawPrediction(int*);
 	//neuralnet->train(inputs, desiredoutput) teaches the neural net to give the desiredoutput when those inputs are seen
-	bool train(int*, int);
+	bool train(int*, int);//true for if it's trained, false if it hasn't
 	//constructor
 	Perceptron(int);
 	//array of size+1 output layer weights

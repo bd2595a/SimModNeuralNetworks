@@ -101,6 +101,7 @@ void train()
 	datafile.close();
 
 //TODO: MAKE SOME NEURAL NETS AND TRAIN THEM HERE, THEN SAVE THE WEIGHTS TO perceptron.txt
+
 }
 
 
