@@ -28,6 +28,7 @@ ocr test
 #if QT_VERSION >= 0x050000
 #include <QtWidgets>
 #endif
+
 //graphics defs here
 #include "ocr.h"
 //neural network is defined here.  assumes neural.cpp is in the same directory too.
