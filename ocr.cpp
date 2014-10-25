@@ -25,6 +25,7 @@ pops up a window, user draws a letter and doubleclicks, the program tries to gue
 #include <math.h>
 #include <QWidget>
 #include <stdlib.h>
+#include <cstdlib>
 
 #if QT_VERSION >= 0x050000
 #include <QtWidgets>
@@ -166,7 +167,7 @@ void test()	//TODO: MAKE SOME NEURAL NETS, READ THE WEIGHTS FROM A FILE perceptr
 	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct output weights
 	{
 		getline(perceptronFile, line);
-		neuron->outputweight[i] = stof(line);
+		neuron->outputweight[i] = std::atof(line.c_str());
 		line = "";
 	}
 
@@ -175,7 +176,7 @@ void test()	//TODO: MAKE SOME NEURAL NETS, READ THE WEIGHTS FROM A FILE perceptr
 		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
 		{
 			getline(perceptronFile, line);
-			neuron->hiddenweight[i][j] = stof(line);
+			neuron->hiddenweight[i][j] = std::atof(line.c_str());
 			line = "";
 
 		}
