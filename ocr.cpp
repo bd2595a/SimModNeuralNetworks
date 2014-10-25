@@ -24,6 +24,7 @@ pops up a window, user draws a letter and doubleclicks, the program tries to gue
 #include <QtGui>
 #include <math.h>
 #include <QWidget>
+#include <stdlib.h>
 
 #if QT_VERSION >= 0x050000
 #include <QtWidgets>
