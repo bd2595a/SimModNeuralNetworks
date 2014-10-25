@@ -118,7 +118,7 @@ void train()
 
 	for (int i = 0; i < linecount; i++)
 	{
-		neuron->getPrediction(sample_input[0]);
+		cout<<neuron->getPrediction(sample_input[0])<<endl;
 	}
 }
 
