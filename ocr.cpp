@@ -106,8 +106,8 @@ void train()
 
 	//TODO: MAKE SOME NEURAL NETS AND TRAIN THEM HERE, THEN SAVE THE WEIGHTS TO perceptron.txt
 	Perceptron* neuron = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
-
-	char theLetter = 'A';
+	
+	char theLetter = 'D';
 	bool isCorrect = false;
 
 	while (!isCorrect)
