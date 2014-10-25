@@ -10,7 +10,6 @@ Michael Black, 10/2014*/
 #include "neural.h"
 
 using namespace std;
-const int size = 200;
 
 //implements the threshold function 1/(1+e^-x)
 //this is mathematically close to the >=0 threshold we use in the single layer perceptron, but is differentiable
@@ -23,6 +22,7 @@ float sigmoid(float x)
 Perceptron::Perceptron(int nodes)
 {
 	//save the input size for later
+	size=nodes;
 	//make an array of output weights, +1 for the bias
 	outputweight=new float[nodes+1];
 	//set each weight to a random real number between -noisemax/2 .. noisemax/2
@@ -45,7 +45,7 @@ Perceptron::Perceptron(int nodes)
 int Perceptron::getPrediction(int* inputs)
 {
 	//store the output of the hidden nodes here
-	float hidden[size];
+	float* hidden = new float[size];
 
 	//for each hidden node
 	for (int hn=0; hn<size; hn++)
@@ -77,7 +77,7 @@ int Perceptron::getPrediction(int* inputs)
 //for example, a perceptron giving 0.9 is more "trustworthy" than a perceptron giving 0.6
 float Perceptron::getRawPrediction(int* inputs)
 {
-	float hidden[size];
+	float* hidden= new float[size];
 
 	for (int hn=0; hn<size; hn++)
 	{
@@ -103,7 +103,7 @@ float Perceptron::getRawPrediction(int* inputs)
 bool Perceptron::train(int* inputs, int want)
 {
 	//this is identical to getPrediction.  We need to get a prediction so that we can determine the error.
-	float hidden[size];
+	float* hidden= new float[size];
 
 	for (int hn=0; hn<size; hn++)
 	{
@@ -127,7 +127,7 @@ bool Perceptron::train(int* inputs, int want)
 	//get an error.  the error is then multiplied by doutput/dhiddenoutput - essentially dthreshold() - to make its effect incremental
 	//the derivative of the sigmoid threshold function is x*(1-x)
 	float error = (want - prediction) * prediction * (1-prediction);
-	float hiddenerror[size+1];
+	float* hiddenerror = new float[size+1];
 
 	//for each hidden node,
 	for(int i=0; i<size; i++)

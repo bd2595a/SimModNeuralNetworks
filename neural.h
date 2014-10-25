@@ -28,5 +28,4 @@ public:
 	//2D array: an array of size+1 hidden layer weights for each of size hidden nodes
 	float** hiddenweight;
 	//the number of inputs and hidden nodes
-	int size;
 };
