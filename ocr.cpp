@@ -133,7 +133,7 @@ void train()
 		qDebug() << sample_output[i] << ": " << neuron->getPrediction(sample_input[i]) << endl;
 	}
 
-	//save the perceptron's weights
+	//save the perceptron's weights, saved in output followed by hidden
 	ofstream perceptronFile;
 	perceptronFile.open("perceptron.txt", ios::out | ios::app);
 	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH + 1; i++)
@@ -146,8 +146,7 @@ void train()
 		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
 		{
 			perceptronFile << neuron->hiddenweight[i][j];
-			if (i != GRIDHEIGHT*GRIDWIDTH -1)
-				perceptronFile << "\n";
+			perceptronFile << "\n";
 		}
 	}
 	perceptronFile << endl;
@@ -156,10 +155,35 @@ void train()
 
 
 //called on "ocr test", after the user draws and double-clicks the mouse
-void test()
+void test()	//TODO: MAKE SOME NEURAL NETS, READ THE WEIGHTS FROM A FILE perceptron.txt, USE THE NEURAL NETS TO IDENTIFY THE LETTER
 {
+	ifstream perceptronFile; //grab the file
+	string line;//empty line
+	perceptronFile.open("perceptron.txt");//open it
 
-	//TODO: MAKE SOME NEURAL NETS, READ THE WEIGHTS FROM A FILE perceptron.txt, USE THE NEURAL NETS TO IDENTIFY THE LETTER
+	Perceptron* neuron = new Perceptron(GRIDWIDTH*GRIDHEIGHT);//create a new perceptron
+	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct output weights
+	{
+		getline(perceptronFile, line);
+		neuron->outputweight[i] = std::stoi(line);
+		line = "";
+	}
+
+	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct hidden weights
+	{
+		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
+		{
+			getline(perceptronFile, line);
+			neuron->hiddenweight[i][j] = std::stoi(line);
+			line = "";
+
+		}
+	}
+	perceptronFile.close();
+
+	//take in the input from the screen
+	int* s = getSquares();
+	qDebug() << neuron->getPrediction(s);
 }
 
 //read the contents of the grid and save them to the end of ocrdata.txt
