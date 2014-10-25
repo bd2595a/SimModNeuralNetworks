@@ -112,13 +112,22 @@ void train()
 	{
 		if (sample_output[i] == theLetter)
 		{
-			neuron->train(sample_input[i], 1);
+			bool isCorrect = neuron->train(sample_input[i], 1);
+			while (!isCorrect)
+			{
+				isCorrect=neuron->train(sample_input[i], 1);
+
+			}
+		}
+		else
+		{
+			neuron->train(sample_input[i], 0);
 		}
 	}
 
 	for (int i = 0; i < linecount; i++)
 	{
-		cout<<neuron->getPrediction(sample_input[0])<<endl;
+		cout << neuron->getPrediction(sample_input[0]) << endl;
 	}
 }
 
