@@ -166,7 +166,7 @@ void test()	//TODO: MAKE SOME NEURAL NETS, READ THE WEIGHTS FROM A FILE perceptr
 	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct output weights
 	{
 		getline(perceptronFile, line);
-		neuron->outputweight[i] = std::stod(line);
+		neuron->outputweight[i] = std::stof(line);
 		line = "";
 	}
 
@@ -175,7 +175,7 @@ void test()	//TODO: MAKE SOME NEURAL NETS, READ THE WEIGHTS FROM A FILE perceptr
 		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
 		{
 			getline(perceptronFile, line);
-			neuron->hiddenweight[i][j] = std::stod(line);
+			neuron->hiddenweight[i][j] = std::stof(line);
 			line = "";
 
 		}
