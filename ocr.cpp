@@ -96,7 +96,7 @@ void train()
 		//the first character is the output letter
 		sample_output[i] = line[0];
 		//then a space, then a 1 or 0 for each square on the screen
-		for (int j = 0; j < GRIDWIDTH*GRIDHEIGHT; j++)
+		for (int j = 0; j < GRIDWIDTH*GRIDHEIGHT-1; j++)
 		{
 			sample_input[i][j] = line[j + 2] == '1' ? 1 : 0;
 		}
@@ -131,7 +131,7 @@ void train()
 
 	for (int i = 0; i < linecount; i++)
 	{
-		cout << sample_output[i] << ": " << neuron->getPrediction(sample_input[i]) << endl;
+		qDebug() << sample_output[i] << ": " << neuron->getPrediction(sample_input[i]) << endl;
 	}
 }
 
@@ -160,6 +160,8 @@ void saveSample()
 //determines what function is called when the user double clicks the window, based on the command line input
 void doOperation()
 {
+	operation += "";
+	operation += "";
 	if (operation.compare("sample") == 0)
 		saveSample();
 	else if (operation.compare("train") == 0)
@@ -275,6 +277,8 @@ void OCRView::mouseDoubleClickEvent(QMouseEvent *event)
 //program starts here
 int main(int argc, char **argv)
 {
+	argv[0] = argv[0];
+	argv[1] = argv[1];
 	//save the command line arguments
 	if (argc >= 2)
 		operation = argv[1];
@@ -291,12 +295,11 @@ int main(int argc, char **argv)
 		cout << " ocr test" << endl;
 		exit(0);
 	}
-
 	//seed the random number generator
 	qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
 
 	//we don't need to make a window if the user selects "train"
-	if (operation.compare("train") == 0)
+	if (operation.compare("trains") == 0)
 	{
 		train();
 		exit(0);
