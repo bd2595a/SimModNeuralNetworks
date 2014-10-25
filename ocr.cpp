@@ -115,6 +115,11 @@ void train()
 			neuron->train(sample_input[i], 1);
 		}
 	}
+
+	for (int i = 0; i < linecount; i++)
+	{
+		neuron->getPrediction(sample_input[0]);
+	}
 }
 
 
