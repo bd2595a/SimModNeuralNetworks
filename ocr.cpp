@@ -105,7 +105,16 @@ void train()
 	datafile.close();
 
 //TODO: MAKE SOME NEURAL NETS AND TRAIN THEM HERE, THEN SAVE THE WEIGHTS TO perceptron.txt
+	Perceptron* neuron = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
 
+	char theLetter = 'A';
+	for (int i = 0; i < linecount; i++)
+	{
+		if (sample_output[i] == theLetter)
+		{
+			neuron->train(sample_input[i], 1);
+		}
+	}
 }
 
 
