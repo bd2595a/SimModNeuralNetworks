@@ -138,13 +138,16 @@ void train()
 	perceptronFile.open("perceptron.txt", ios::out | ios::app);
 	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH + 1; i++)
 	{
-		perceptronFile << neuron->outputweight[i]<<"\n";
+		perceptronFile << neuron->outputweight[i];
+		perceptronFile << "\n";
 	}
 	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)
 	{
-		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH+1; j++)
+		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
 		{
-			perceptronFile << neuron->hiddenweight[i][j] << "\n";
+			perceptronFile << neuron->hiddenweight[i][j];
+			if (i != GRIDHEIGHT*GRIDWIDTH -1)
+				perceptronFile << "\n";
 		}
 	}
 	perceptronFile.close();
