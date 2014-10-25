@@ -96,7 +96,7 @@ void train()
 		//the first character is the output letter
 		sample_output[i] = line[0];
 		//then a space, then a 1 or 0 for each square on the screen
-		for (int j = 0; j < GRIDWIDTH*GRIDHEIGHT-1; j++)
+		for (int j = 0; j < GRIDWIDTH*GRIDHEIGHT - 1; j++)
 		{
 			sample_input[i][j] = line[j + 2] == '1' ? 1 : 0;
 		}
@@ -106,11 +106,10 @@ void train()
 
 	//TODO: MAKE SOME NEURAL NETS AND TRAIN THEM HERE, THEN SAVE THE WEIGHTS TO perceptron.txt
 	Perceptron* neuron = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
-	
+
 	char theLetter = 'D';
 	bool isCorrect = false;
-
-	while (!isCorrect)
+	while (!isCorrect)//trains for one letter
 	{
 		for (int i = 0; i < linecount; i++)
 		{
@@ -129,10 +128,26 @@ void train()
 		}
 	}
 
-	for (int i = 0; i < linecount; i++)
+	for (int i = 0; i < linecount; i++)//prints out the outcome. optional
 	{
 		qDebug() << sample_output[i] << ": " << neuron->getPrediction(sample_input[i]) << endl;
 	}
+
+	//save the perceptron's weights
+	ofstream perceptronFile;
+	perceptronFile.open("perceptron.txt", ios::out | ios::app);
+	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH + 1; i++)
+	{
+		perceptronFile << neuron->outputweight[i]<<"\n";
+	}
+	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)
+	{
+		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH+1; j++)
+		{
+			perceptronFile << neuron->hiddenweight[i][j] << "\n";
+		}
+	}
+	perceptronFile.close();
 }
 
 
@@ -160,8 +175,6 @@ void saveSample()
 //determines what function is called when the user double clicks the window, based on the command line input
 void doOperation()
 {
-	operation += "";
-	operation += "";
 	if (operation.compare("sample") == 0)
 		saveSample();
 	else if (operation.compare("train") == 0)
@@ -299,7 +312,7 @@ int main(int argc, char **argv)
 	qsrand(QTime(0, 0, 0).secsTo(QTime::currentTime()));
 
 	//we don't need to make a window if the user selects "train"
-	if (operation.compare("trains") == 0)
+	if (operation.compare("train") == 0)
 	{
 		train();
 		exit(0);
