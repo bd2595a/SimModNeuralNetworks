@@ -150,6 +150,7 @@ void train()
 				perceptronFile << "\n";
 		}
 	}
+	perceptronFile << endl;
 	perceptronFile.close();
 }
 
