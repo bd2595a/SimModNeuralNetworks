@@ -110,22 +110,21 @@ void train()
 	Perceptron* neuron = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
 
 	char theLetter = 'D';
-	bool isCorrect = false;
+	bool isCorrect;
 	while (!isCorrect)//trains for one letter
 	{
-		for (int i = 0; i < linecount; i++)
+		isCorrect = true;//assume it's true
+		for (int i = 0; i < linecount; i++)//go through each line
 		{
-			if (sample_output[i] == theLetter)
+			if (sample_output[i] == theLetter)//if this line has the letter want 
 			{
-				isCorrect = neuron->train(sample_input[i], 1);
-				if (!isCorrect)
-					break;
+				if (!neuron->train(sample_input[i], 1))//if we get a false, restart
+					isCorrect = false;
 			}
 			else
 			{
-				isCorrect = neuron->train(sample_input[i], 0);
-				if (!isCorrect)
-					break;
+				if (!neuron->train(sample_input[i], 0))
+					isCorrect = false;
 			}
 		}
 	}
