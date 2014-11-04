@@ -126,7 +126,7 @@ void train()
 			{
 				sample_output[i];
 				letters[j];
-				if (sample_output[i] == letters[j])//if this line has the letter want 
+				if (sample_output[i] == letters[j])//if this line has the letter that the perceptron is trained for
 				{
 					if (!perceptrons[j]->train(sample_input[i], 1))//if we get a false, restart
 						isCorrect = false;
