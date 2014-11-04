@@ -58,8 +58,9 @@ OCRView* view;
 //operation is "sample" "train" or "test"
 //symbol is the letter entered when the operation is "sample"
 string operation, symbol;
-
-Perceptron* perceptrons[5];
+const int numLetters = 3;
+Perceptron* perceptrons[numLetters];
+char letters[numLetters];
 
 //called immediately on "ocr train"
 //reads the images in ocrdata.txt, builds a set of neural nets, trains them, and saves the weights to perceptron.txt
@@ -109,47 +110,61 @@ void train()
 	datafile.close();
 
 	//TODO: MAKE SOME NEURAL NETS AND TRAIN THEM HERE, THEN SAVE THE WEIGHTS TO perceptron.txt
-	Perceptron* neuron = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
+	for (int i = 0; i < numLetters; i++)
+		perceptrons[i] = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
+	letters[0] = 'A';
+	letters[1] = 'D';
+	letters[2] = 'e';
 
-	char theLetter = 'D';
-	bool isCorrect=false;
+	bool isCorrect = false;
 	while (!isCorrect)//trains for one letter
 	{
 		isCorrect = true;//assume it's true
 		for (int i = 0; i < linecount; i++)//go through each line
 		{
-			if (sample_output[i] == theLetter)//if this line has the letter want 
+			for (int j = 0; j < numLetters; j++)
 			{
-				if (!neuron->train(sample_input[i], 1))//if we get a false, restart
-					isCorrect = false;
-			}
-			else
-			{
-				if (!neuron->train(sample_input[i], 0))
-					isCorrect = false;
+				sample_output[i];
+				letters[j];
+				if (sample_output[i] == letters[j])//if this line has the letter want 
+				{
+					if (!perceptrons[j]->train(sample_input[i], 1))//if we get a false, restart
+						isCorrect = false;
+				}
+				else
+				{
+					if (!perceptrons[j]->train(sample_input[i], 0))
+						isCorrect = false;
+				}
 			}
 		}
 	}
 
-	for (int i = 0; i < linecount; i++)//prints out the outcome. optional
+	for (int i = 0; i < linecount; i++)//prints out each guess
 	{
-		qDebug() << sample_output[i] << ": " << neuron->getPrediction(sample_input[i]) << endl;
+		for (int j = 0; j < numLetters; j++)
+		{
+			qDebug() << sample_output[i] << ": " << letters[j] << ":" << perceptrons[j]->getPrediction(sample_input[i]) << endl;
+		}
 	}
 
-	//save the perceptron's weights, saved in output followed by hidden
+	////save the perceptron's weights, saved in output followed by hidden
 	ofstream perceptronFile;
 	perceptronFile.open("perceptron.txt", ios::out | ios::app);
-	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH + 1; i++)
+	for (int k = 0; k < numLetters; k++)
 	{
-		perceptronFile << neuron->outputweight[i];
-		perceptronFile << "\n";
-	}
-	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)
-	{
-		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
+		for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH + 1; i++)
 		{
-			perceptronFile << neuron->hiddenweight[i][j];
+			perceptronFile << perceptrons[k]->outputweight[i];
 			perceptronFile << "\n";
+		}
+		for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)
+		{
+			for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
+			{
+				perceptronFile << perceptrons[k]->hiddenweight[i][j];
+				perceptronFile << "\n";
+			}
 		}
 	}
 	perceptronFile << endl;
@@ -164,29 +179,47 @@ void test()	//TODO: MAKE SOME NEURAL NETS, READ THE WEIGHTS FROM A FILE perceptr
 	string line;//empty line
 	perceptronFile.open("perceptron.txt");//open it
 
-	Perceptron* neuron = new Perceptron(GRIDWIDTH*GRIDHEIGHT);//create a new perceptron
-	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct output weights
+	for (int i = 0; i < numLetters; i++)
+		perceptrons[i] = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
+	letters[0] = 'A';
+	letters[1] = 'D';
+	letters[2] = 'e';
+	for (int k = 0; k < numLetters; k++)
 	{
-		getline(perceptronFile, line);
-		neuron->outputweight[i] = std::atof(line.c_str());
-		line = "";
-	}
-
-	for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct hidden weights
-	{
-		for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
+		for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct output weights
 		{
 			getline(perceptronFile, line);
-			neuron->hiddenweight[i][j] = std::atof(line.c_str());
+			perceptrons[k]->outputweight[i] = std::atof(line.c_str());
 			line = "";
+		}
 
+		for (int i = 0; i < GRIDHEIGHT*GRIDWIDTH; i++)//set it up with all of the correct hidden weights
+		{
+			for (int j = 0; j < GRIDHEIGHT*GRIDWIDTH + 1; j++)
+			{
+				getline(perceptronFile, line);
+				perceptrons[k]->hiddenweight[i][j] = std::atof(line.c_str());
+				line = "";
+
+			}
 		}
 	}
 	perceptronFile.close();
 
 	//take in the input from the screen
 	int* s = getSquares();
-	qDebug() << neuron->getPrediction(s);
+	float highest = 99999;
+	int chosenIndex = 0;
+	for (int i = 0; i < numLetters; i++)
+	{
+		int hello = perceptrons[i]->getRawPrediction(s);
+		if (perceptrons[i]->getRawPrediction(s) < highest)
+		{
+			chosenIndex = i;
+			highest = perceptrons[i]->getRawPrediction(s);
+		}
+	}
+	qDebug() << letters[chosenIndex];
 }
 
 //read the contents of the grid and save them to the end of ocrdata.txt
