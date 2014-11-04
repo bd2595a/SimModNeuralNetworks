@@ -59,6 +59,8 @@ OCRView* view;
 //symbol is the letter entered when the operation is "sample"
 string operation, symbol;
 
+Perceptron* perceptrons[5];
+
 //called immediately on "ocr train"
 //reads the images in ocrdata.txt, builds a set of neural nets, trains them, and saves the weights to perceptron.txt
 void train()
@@ -110,7 +112,7 @@ void train()
 	Perceptron* neuron = new Perceptron(GRIDHEIGHT*GRIDWIDTH);
 
 	char theLetter = 'D';
-	bool isCorrect;
+	bool isCorrect=false;
 	while (!isCorrect)//trains for one letter
 	{
 		isCorrect = true;//assume it's true
